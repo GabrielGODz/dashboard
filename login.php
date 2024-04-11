@@ -85,5 +85,12 @@
 <script src="dist/plugins/sweetalert2/sweetalert2.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+
+<?php
+
+include ("sweet-alert-2.php")
+
+?>
+
 </body>
 </html>
