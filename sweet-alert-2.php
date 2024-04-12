@@ -3,7 +3,7 @@
 session_start();
 
 // ISSET = VERIFICA SE AS VARIÁVEIS FORMA CRIADAS
-if (isset($_SESSION["tipo"]) && isset($_SESSION["msg"])) {
+if (isset($_SESSION["tipo"]) && isset($_SESSION["title"]) && isset($_SESSION["msg"])) {
     echo "
     <script>
     $(function() {
@@ -15,11 +15,16 @@ if (isset($_SESSION["tipo"]) && isset($_SESSION["msg"])) {
         });
 
         Toast.fire({
-            icon: '".$_SESSION["tipo"]."',
-            title: '".$_SESSION["msg"]."'
+            icon: '" . $_SESSION["tipo"] . "',
+            title: '" . $_SESSION["title"] . "',
+            text: '" . $_SESSION["msg"] . "'
         });
-
     });
     </script>
     ";
+
+    // APÓS EXIBIR A MENSAGEM, LIMPA AS VARIÁVEIS DE SESSÃO
+    unset($_SESSION["tipo"]);
+    unset($_SESSION["msg"]);
+    unset($_SESSION["title"]);
 }
