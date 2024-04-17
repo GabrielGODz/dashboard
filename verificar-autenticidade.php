@@ -1,7 +1,9 @@
 <?php
-
 // INICIAR SESSÃO PARA TER ACESSO A VARIÁVEIS GLOBAIS
 session_start();
+
+// CAMINHO FIXO DO SOFTWARE WEB
+define("caminhoURL", "http://localhost/gabriel/dashboard/");
 
 // VERIFICA SE O USUÁRIO NÃO ESTÁ CONECTADO
 if ($_SESSION["autenticado"] != true) {
@@ -15,14 +17,17 @@ if ($_SESSION["autenticado"] != true) {
     $tempo_limite = 300; // SEGUNDOS
     $tempo_atual = time();
 
-    // VERFIFICAR TEMPO INATIVO DO USUÁRIO
+    // VERIFICAR TEMPO INATIVO DO USUÁRIO
     if (($tempo_atual - $_SESSION["tempo_login"]) > $tempo_limite) {
         // DESTRUIR QUALQUER SESSÃO EXISTENTE
-        $_SESSION["tipo"] = "warning";
-        $_SESSION["title"] = "Ops!";
-        $_SESSION["msg"] = "Tempo de sessão esgotado!";
+        session_destroy();
 
-        header("Location: ./login.php");
+        echo "
+        <script>
+            alert('Tempo de sessão esgotado!');
+            window.location='./login.php';
+        </script>
+        ";
         exit;
     } else {
         $_SESSION["tempo_login"] = time();
