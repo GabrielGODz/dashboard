@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+
 
 // ISSET = VERIFICA SE AS VARIÁVEIS FORAM CRIADAS
 if (isset($_SESSION["title"]) && isset($_SESSION["tipo"]) && isset($_SESSION["msg"])) {
@@ -24,3 +24,4 @@ if (isset($_SESSION["title"]) && isset($_SESSION["tipo"]) && isset($_SESSION["ms
     </script>
     ";
 }
+?>

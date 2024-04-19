@@ -26,6 +26,8 @@ include('../conexao-pdo.php');
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="../dist/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="../dist/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -63,16 +65,33 @@ include('../conexao-pdo.php');
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Manutenção de micro</td>
+                      <?php
+                      // MONTAR A SINTAXE SQL PARA ENVIAR O SQL
+                      $sql = "
+                      SElECT pk_servico, servico
+                      FROM servicos
+                      ORDER BY servico
+                      ";
+
+                      // PREPARA A SINTAXE NA CONEXÃO
+                      $stmt = $conn->prepare($sql);
+                      // EXECUTA O COMANDO NO MYSQL
+                      $stmt->execute();
+                      // RECEBE AS INFORMAÇÕES VINDAS DO MYSQL
+                      $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+                      // LAÇO DE REPETIÇÃO PARA PRINTAR AS INFORMAÇÕES
+                      foreach ($dados as $key => $row) {
+                        echo '
+                       <tr>
+                        <td>' . $row->pk_servico . '</td>
+                        <td>' . $row->servico . '</td>
                         <td>
                           <div class="btn-group">
                             <button class="btn btn-default dropdown-toggle dropdown-icon" type="button" data-toggle="dropdown">
                               <i class="bi bi-tools"></i>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                              <a class="dropdown-item" href="#">
+                              <a class="dropdown-item" href="form.php?ref=' . base64_encode($row->pk_servico) . '">
                                 <i class="bi bi-pencil"></i>Editar</a>
                               </a>
                               <a class="dropdown-item" href="#">
@@ -82,6 +101,11 @@ include('../conexao-pdo.php');
                           </div>
                         </td>
                       </tr>
+                      ';
+                      }
+
+                      ?>
+
                     </tbody>
                   </table>
                 </div>
@@ -125,6 +149,10 @@ include('../conexao-pdo.php');
   <script src="../dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
   <!-- AdminLTE App -->
   <script src="../dist/js/adminlte.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="../dist/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+  <?php include("../sweet-alert-2.php"); ?>
 
   <script>
     $(function() {

@@ -24,7 +24,7 @@ if(empty($_COOKIE["email"]) || empty($_COOKIE["senha"])) {
     <!-- Font Awesome -->
     <link rel="stylesheet" href="dist/plugins/fontawesome-free/css/all.min.css">
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="dist/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../dist/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
