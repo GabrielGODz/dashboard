@@ -2,28 +2,34 @@
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
 
+$pk_cliente = "";
+$nome = "";
+$cpf = "";
+$whatsapp = "";
+$email = "";
+
 // VERIFICA SE NÃO ESTÁ VINDO ID NA URL
-if(empty($_GET["ref"])) {
-    $pk_servico = "";
-    $servico = "";
+if (empty($_GET["ref"])) {
+    $pk_cliente = "";
+    $nome = "";
 } else {
-    $pk_servico = base64_decode(trim($_GET["ref"]));
+    $pk_cliente = base64_decode(trim($_GET["ref"]));
     // MONTA A SINTAXE SQL PARA ENVIAR AO MYSQL
     $sql = "
-    SELECT pk_servico, servico
-    FROM servicos
-    WHERE pk_servico = :pk_servico
+    SELECT pk_cliente, nome
+    FROM clientes
+    WHERE pk_cliente = :pk_cliente
     ";
     // PREPARA A SINTAXE
     $stmt = $conn->prepare($sql);
     // SUBSTITUI A STRING :PK_SERVICO PELA VARIÁVEL $PK_SERVICO
-    $stmt->bindParam(':pk_servico',$pk_servico);
+    $stmt->bindParam(':pk_cliente', $pk_cliente);
     // EXECUTA A SINTAXE FINAL NO MYSQL
     $stmt->execute();
     // VERIFICAR SE ENCONTROU ALGUM REGISTRO NO BANCO DE DADOS
     if ($stmt->rowCount() > 0) {
         $dado = $stmt->fetch(PDO::FETCH_OBJ);
-        $servico = $dado->servico;
+        $nome = $dado->nome;
     } else {
         $_SESSION["tipo"] = 'error';
         $_SESSION["title"] = 'Ops!';
@@ -82,33 +88,46 @@ if(empty($_GET["ref"])) {
                     <div class="row mt-3">
                         <div class="col">
                             <form action="salvar.php" method="post">
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h3 class="card-title">Lista de serviços</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label for="pk_servico" class="form-label">Cód</label>
-                                            <input readonly type="text" class="form-control" id="pk_servico" name="pk_servico" value="<?php echo $pk_servico; ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label for="servico" class="form-label">Serviço</label>
-                                            <input required type="text" class="form-control" id="servico" name="servico" value="<?php echo $servico; ?>">
-                                        </div>
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Lista de clientes</h3>
                                     </div>
-                                </div>
-                                <!-- /.card-body -->
-                                <div class="card-footer text-right">
-                                    <a href="./" class="btn btn-outline-danger rounded-circle">
-                                        <i class="bi bi-arrow-left"></i>
-                                    </a>
-                                    <button type="submit" class="btn btn-primary rounded-circle">
-                                        <i class="bi bi-floppy"></i>
-                                    </button>
-                                </div>
-                                <!-- /.card-footer -->
-                            </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="pk_cliente" class="form-label">Cód</label>
+                                                <input readonly type="text" class="form-control" id="pk_cliente" name="pk_cliente" value="<?php echo $pk_cliente; ?>">
+                                            </div>
+                                            <div class="col">
+                                                <label for="nome" class="form-label">Nome</label>
+                                                <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="cpf" class="form-label">CPF</label>
+                                                <input value="<?php echo $cpf ?>" type="text" id="cpf" name="cpf" class="form-control" data-mask="000.000.000-00" minlength="14" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="whatsapp" class="form-label">WhatsApp</label>
+                                                <input value="<?php echo $whatsapp ?>" type="text" id="whatsapp" name="whatsapp" class="form-control">
+                                            </div>
+                                            <div class="col">
+                                                <label for="email" class="form-label">E-mail</label>
+                                                <input value="<?php echo $email ?>" type="email" id="email" name="email" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer text-right">
+                                            <a href="./" class="btn btn-outline-danger rounded-circle">
+                                                <i class="bi bi-arrow-left"></i>
+                                            </a>
+                                            <button type="submit" class="btn btn-primary rounded-circle">
+                                                <i class="bi bi-floppy"></i>
+                                            </button>
+                                        </div>
+                                        <!-- /.card-footer -->
+                                    </div>
                             </form>
                             <!-- /.card -->
 
@@ -168,6 +187,24 @@ if(empty($_GET["ref"])) {
                 }
             });
         })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        // INÍCIO -- FORMATAR MÁSCARA DO WHATSAPP
+        var options = {
+            onKeyPress: function(whatsapp, e, field, options) {
+                var masks = ['(00) 0000-000#', '(00) 00000-0000'];
+                var mask = (whatsapp.length > 14) ? masks[1] : masks[0];
+                $('#whatsapp').mask(mask, options);
+            }
+
+        };
+        $('#whatsapp').mask('(00) 0000-000#', options);
+        // FIM -- FORMATAR MÁSCARA DO WHATSAPP
     </script>
 </body>
 
