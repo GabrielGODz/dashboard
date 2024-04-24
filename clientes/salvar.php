@@ -6,7 +6,7 @@ include("../conexao-pdo.php");
 // VERIFICA SE ESTÁ VINDO INFORMAÇÕES VIA POST
 if ($_POST) {
     // VERIFICA CAMPOS OBRIGATÓRIOS
-    if (empty($_POST["nome"])) {
+    if (empty($_POST["nome"]) || empty($_POST["cpf"]) || empty($_POST["email"])) {
         $_SESSION["tipo"] = 'warning';
         $_SESSION["title"] = 'Ops!';
         $_SESSION["msg"] = 'Por favor, preencha os campos obrigatórios.';
@@ -16,25 +16,38 @@ if ($_POST) {
         // RECUPERA INFORMAÇÕES PREENCHIDAS PELO USUÁRIO
         $pk_cliente = trim($_POST["pk_cliente"]);
         $nome = trim($_POST["nome"]);
+        $cpf = trim($_POST["cpf"]);
+        $whatsapp = trim($_POST["whatsapp"]);
+        $email = trim($_POST["email"]);
 
         try {
             if (empty($pk_cliente)) {
                 $sql = "
-                INSERT INTO clientes (nome) VALUES
-                (:nome)
+                INSERT INTO clientes (nome, cpf, whatsapp, email) VALUES
+                (:nome, :cpf, :whatsapp, :email)
                 ";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(':nome', $nome);
+                $stmt->bindParam(':cpf', $cpf);
+                $stmt->bindParam(':whatsapp', $whatsapp);
+                $stmt->bindParam(':email', $email);
             } else {
                 $sql = "
                 UPDATE clientes SET
-                nome = :nome
+                nome = :nome,
+                cpf = :cpf,
+                whatsapp = :whatsapp,
+                email = :email
                 WHERE pk_cliente = :pk_cliente
                 ";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(':pk_cliente', $pk_cliente);
                 $stmt->bindParam(':nome', $nome);
+                $stmt->bindParam(':cpf', $cpf);
+                $stmt->bindParam(':whatsapp', $whatsapp);
+                $stmt->bindParam(':email', $email);
             }
+
             // EXECUTA INSERT OU UPDATE ACIMA
             $stmt->execute();
 
@@ -48,6 +61,17 @@ if ($_POST) {
             $_SESSION["title"] = 'Ops!';
             $_SESSION["msg"] = $ex->getMessage();
             header("Location: ./");
+
+            if (mysqli_errno($conn) == 1062) {
+                $msg = "Campo CPF, E-mail e/ou Whatsapp já cadastrado.";
+            }
+            echo
+            "
+            <script>
+                alert('$msg');
+                window.location='./';
+            </script>   
+            ";
             exit;
         }
     }

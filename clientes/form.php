@@ -2,21 +2,19 @@
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
 
-$pk_cliente = "";
-$nome = "";
-$cpf = "";
-$whatsapp = "";
-$email = "";
 
 // VERIFICA SE NÃO ESTÁ VINDO ID NA URL
 if (empty($_GET["ref"])) {
     $pk_cliente = "";
     $nome = "";
+    $cpf = "";
+    $whatsapp = "";
+    $email = "";
 } else {
     $pk_cliente = base64_decode(trim($_GET["ref"]));
     // MONTA A SINTAXE SQL PARA ENVIAR AO MYSQL
     $sql = "
-    SELECT pk_cliente, nome
+    SELECT nome, cpf, whatsapp, email
     FROM clientes
     WHERE pk_cliente = :pk_cliente
     ";
@@ -30,6 +28,9 @@ if (empty($_GET["ref"])) {
     if ($stmt->rowCount() > 0) {
         $dado = $stmt->fetch(PDO::FETCH_OBJ);
         $nome = $dado->nome;
+        $cpf = $dado->cpf;
+        $whatsapp = $dado->whatsapp;
+        $email = $dado->email;
     } else {
         $_SESSION["tipo"] = 'error';
         $_SESSION["title"] = 'Ops!';
@@ -110,7 +111,7 @@ if (empty($_GET["ref"])) {
                                             </div>
                                             <div class="col">
                                                 <label for="whatsapp" class="form-label">WhatsApp</label>
-                                                <input value="<?php echo $whatsapp ?>" type="text" id="whatsapp" name="whatsapp" class="form-control">
+                                                <input required value="<?php echo $whatsapp ?>" type="text" id="whatsapp" name="whatsapp" class="form-control">
                                             </div>
                                             <div class="col">
                                                 <label for="email" class="form-label">E-mail</label>

@@ -97,8 +97,7 @@ include('../conexao-pdo.php');
                               <a class="dropdown-item" href="./form.php?ref=' . base64_encode($row->pk_cliente) . '">
                                 <i class="bi bi-pencil"></i>Editar</a>
                               </a>
-                              <a class="dropdown-item" href="./remover.php?ref=' . base64_encode($row->pk_cliente) . '">
-                                <i class="bi bi-trash"></i>Remover</a>
+                              <li><a class="dropdown-item" onclick= "if(confirm(\'Deseja realmente remover este registro?\')) { window.location=\'remover.php?ref=' . base64_encode($row->pk_cliente) . '\'}" href="#"><i class="bi bi-trash me-3"></i>Remover</a></li>
                               </a>
                             </ul>
                           </div>

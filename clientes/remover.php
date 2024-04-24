@@ -7,7 +7,7 @@ if (empty($_GET["ref"])) {
     header("Location: ./");
     exit;
 } else {
-    $pk_servico = base64_decode($_GET["ref"]);
+    $pk_cliente = base64_decode($_GET["ref"]);
 
     $sql = "
     DELETE FROM clientes
