@@ -61,25 +61,25 @@ include('./conexao-pdo.php');
                                         <div class="row">
                                             <div class="col-md-1">
                                                 <label for="pk_cliente" class="form-label">Cód</label>
-                                                <input readonly type="text" class="form-control" id="pk_cliente" name="pk_cliente" value="<?php echo $pk_cliente; ?>">
+                                                <input readonly type="text" class="form-control" id="pk_cliente" name="pk_cliente" value="">
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="nome" class="form-label">CPF</label>
-                                                <input required type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
+                                                <input required type="text" class="form-control" id="nome" name="nome" value="">
                                             </div>
                                         </div>
                                         <div class="col mb-3">
                                             <div class="col">
-                                                <label for="cpf" class="form-label">Nome</label>
+                                                <label for="cpf" class="form-label">Data O.S.</label>
                                                 <input value="<?php echo $cpf ?>" type="text" id="cpf" name="cpf" class="form-control" data-mask="000.000.000-00" minlength="14" required>
                                             </div>
                                             <div class="col">
-                                                <label for="whatsapp" class="form-label">WhatsApp</label>
-                                                <input required value="<?php echo $whatsapp ?>" type="text" id="whatsapp" name="whatsapp" class="form-control">
+                                                <label for="whatsapp" class="form-label">Data Inicio</label>
+                                                <input  value="" type="date" id="" name="" class="form-control">
                                             </div>
                                             <div class="col">
-                                                <label for="email" class="form-label">E-mail</label>
-                                                <input value="<?php echo $email ?>" type="email" id="email" name="email" class="form-control" required>
+                                                <label for="email" class="form-label">Data Fim</label>
+                                                <input value="" type="date" id="" name="e" class="form-control">
                                             </div>
                                         </div>
                                         <!-- /.card-body -->
