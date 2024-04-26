@@ -53,7 +53,7 @@ include('../conexao-pdo.php');
             <div class="col">
               <div class="card card-primary card-outline">
                 <div class="card-header">
-                  <h3 class="card-title">Lista de serviços</h3>
+                  <h3 class="card-title">Lista de O.S.</h3>
                   <a href="./form.php" class="btn btn-sm btn-primary rounded-circle float-right">
                     <i class="bi bi-plus"></i>
 
@@ -64,20 +64,30 @@ include('../conexao-pdo.php');
                     <thead>
                       <tr>
                         <th>CÓD</th>
-                        <th>SERVIÇO</th>
-                        <th>OPÇÔES</th>
+                        <th>CLIENTE</th>
+                        <th>DATA INICIAL</th>
+                        <th>DATA FINAL</th>
+                        <th>R$ TOTAL</th>
+                        <th>OPÇÕES</th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
                       // MONTAR A SINTAXE SQL PARA ENVIAR O SQL
                       $sql = "
-                      SElECT pk_servico, servico
-                      FROM servicos
-                      ORDER BY servico
+                        SElECT pk_ordem_servico,
+                        DATE_FORMAT(data_inicio, '%d/%m/%Y') data_inicio,
+                        DATE_FORMAT(data_fim, '%d/%m/%Y') data_fim,
+                        valor_total,
+                        FORMAT(valor_total,2, 'de_DE') valor_total,
+                      nome
+                      FROM ordens_servicos
+                      JOIN clientes ON fk_cliente = pk_cliente
+                      ORDER BY data_inicio DESC
                       ";
 
-                      // PREPARA A SINTAXE NA CONEXÃO
+                      try {
+                        // PREPARA A SINTAXE NA CONEXÃO
                       $stmt = $conn->prepare($sql);
                       // EXECUTA O COMANDO NO MYSQL
                       $stmt->execute();
@@ -87,18 +97,21 @@ include('../conexao-pdo.php');
                       foreach ($dados as $row) {
                         echo '
                        <tr>
-                        <td>' . $row->pk_servico . '</td>
-                        <td>' . $row->servico . '</td>
+                        <td>' . $row->pk_ordem_servico . '</td>
+                        <td>' . $row->nome . '</td>
+                        <td>' . $row->data_inicio . '</td>
+                        <td>' . $row->data_fim . '</td>
+                        <td>' . $row->valor_total . '</td>
                         <td>
                           <div class="btn-group">
                             <button class="btn btn-default dropdown-toggle dropdown-icon" type="button" data-toggle="dropdown">
                               <i class="bi bi-tools"></i>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                              <a class="dropdown-item" href="./form.php?ref=' . base64_encode($row->pk_servico) . '">
+                              <a class="dropdown-item" href="./form.php?ref=' . base64_encode($row->pk_ordem_servico) . '">
                                 <i class="bi bi-pencil"></i>Editar</a>
                               </a>
-                              <a class="dropdown-item" href="./remover.php?ref=' . base64_encode($row->pk_servico) . '">
+                              <a class="dropdown-item" href="./remover.php?ref=' . base64_encode($row->pk_ordem_servico) . '">
                                 <i class="bi bi-trash"></i>Remover</a>
                               </a>
                             </ul>
@@ -107,7 +120,11 @@ include('../conexao-pdo.php');
                       </tr>
                       ';
                       }
-
+                      } catch (Exception $ex) {
+                        $_SESSION["tipo"] = "error";
+                        $_SESSION["title"] = "Ops!";
+                        $_SESSION["msg"] = $ex->getMessage();
+                      }
                       ?>
 
                     </tbody>

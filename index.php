@@ -43,61 +43,111 @@ include('./conexao-pdo.php');
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
-            <!-- /.col -->
+            <div class="col-sm-6">
+              <h1 class="m-0">Página inicial</h1>
+            </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
 
       <!-- Main content -->
-      <div class="row mt-3">
-                        <div class="col">
-                            <form action="salvar.php" method="post">
-                                <div class="card card-primary card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Lista de clientes</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                <label for="pk_cliente" class="form-label">Cód</label>
-                                                <input readonly type="text" class="form-control" id="pk_cliente" name="pk_cliente" value="">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="nome" class="form-label">CPF</label>
-                                                <input required type="text" class="form-control" id="nome" name="nome" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col mb-3">
-                                            <div class="col">
-                                                <label for="cpf" class="form-label">Data O.S.</label>
-                                                <input value="<?php echo $cpf ?>" type="text" id="cpf" name="cpf" class="form-control" data-mask="000.000.000-00" minlength="14" required>
-                                            </div>
-                                            <div class="col">
-                                                <label for="whatsapp" class="form-label">Data Inicio</label>
-                                                <input  value="" type="date" id="" name="" class="form-control">
-                                            </div>
-                                            <div class="col">
-                                                <label for="email" class="form-label">Data Fim</label>
-                                                <input value="" type="date" id="" name="e" class="form-control">
-                                            </div>
-                                        </div>
-                                        <!-- /.card-body -->
-                                        <div class="card-footer text-right">
-                                            <a href="./" class="btn btn-outline-danger rounded-circle">
-                                                <i class="bi bi-arrow-left"></i>
-                                            </a>
-                                            <button type="submit" class="btn btn-primary rounded-circle">
-                                                <i class="bi bi-floppy"></i>
-                                            </button>
-                                        </div>
-                                        <!-- /.card-footer -->
-                                    </div>
-                            </form>
-                            <!-- /.card -->
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Small boxes (Stat box) -->
+          <div class="row">
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>150</h3>
 
-                        </div>
-                    </div>
+                  <p>Ordens de Serviço</p>
+                </div>
+                <div class="icon">
+                  <i class="bi bi-wrench-adjustable-circle-fill"></i>
+                </div>
+                <a href="./ordens_servico.php" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                  <p>Ordens Concluidas</p>
+                </div>
+                <div class="icon">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <a href="./ordens_servico.php" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3>44</h3>
+
+                  <p>Clientes</p>
+                </div>
+                <div class="icon">
+                  <i class="bi bi-person-circle"></i>
+                </div>
+                <a href="./clientes.php" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3>65</h3>
+
+                  <p>Serviços</p>
+                </div>
+                <div class="icon">
+                  <i class="bi-gear-wide-connected"></i>
+                </div>
+                <a href="#" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <!-- ./col -->
+          </div>
+          <!-- /.row -->
+          <!-- BAR CHART -->
+          <div class="row">
+            <div class="col">
+              <div class="card card-success">
+                <div class="card-header">
+                  <h3 class="card-title">Bar Chart</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+      </section>
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
@@ -138,45 +188,42 @@ include('./conexao-pdo.php');
       $("#theme-mode").click(function() {
         // pegar atributo class do objeto
         var classMode = $("#theme-mode").attr("class")
-        if (classMode == "fas fa-sun") {
+        if(classMode == "fas fa-sun") {
           $("body").removeClass("dark-mode");
           $("#theme-mode").attr("class", "fas fa-moon");
-          $("#navTopo").attr("class", "main-header navbar navbar-expand navbar-white navbar-light");
-          $("#asideMenu").attr("class", "main-sidebar sidebar-light-primary elevation-4");
         } else {
           $("body").addClass("dark-mode");
           $("#theme-mode").attr("class", "fas fa-sun");
-          $("#navTopo").attr("class", "main-header navbar navbar-expand navbar-black navbar-dark");
-          $("#asideMenu").attr("class", "main-sidebar sidebar-dark-primary elevation-4");
         }
       });
-
-      var areaChartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'Digital Goods',
-            backgroundColor: 'rgba(60,141,188,0.9)',
-            borderColor: 'rgba(60,141,188,0.8)',
-            pointRadius: false,
-            pointColor: '#3b8bba',
-            pointStrokeColor: 'rgba(60,141,188,1)',
-            pointHighlightFill: '#fff',
-            pointHighlightStroke: 'rgba(60,141,188,1)',
-            data: [28, 48, 40, 19, 86, 27, 90]
-          },
-          {
-            label: 'Electronics',
-            backgroundColor: 'rgba(210, 214, 222, 1)',
-            borderColor: 'rgba(210, 214, 222, 1)',
-            pointRadius: false,
-            pointColor: 'rgba(210, 214, 222, 1)',
-            pointStrokeColor: '#c1c7d1',
-            pointHighlightFill: '#fff',
-            pointHighlightStroke: 'rgba(220,220,220,1)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-        ]
-      }
+      
+    var areaChartData = {
+      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label               : 'Digital Goods',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : false,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+          label               : 'Electronics',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : false,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : [65, 59, 80, 81, 56, 55, 40]
+        },
+      ]
+    }
 
       //-------------
       //- BAR CHART -

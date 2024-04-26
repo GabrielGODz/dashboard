@@ -32,7 +32,7 @@
         </li>
         <!-- item Ordem de serviço -->
         <li class="nav-item">
-          <a href="<?php echo caminhoURL;?>/ordens_servico" class="nav-link">
+          <a href="<?php echo caminhoURL;?>/ordens-servico" class="nav-link">
             <i class="nav-icon bi bi-wrench-adjustable-circle-fill"></i>
             <p>
               Ordens de Serviço
