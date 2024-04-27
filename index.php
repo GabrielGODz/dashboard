@@ -1,6 +1,9 @@
 <?php
 include('./verificar-autenticidade.php');
 include('./conexao-pdo.php');
+
+$pagina_ativa = 'index';
+
 ?>
 
 

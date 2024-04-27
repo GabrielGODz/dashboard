@@ -1,8 +1,10 @@
 <?php
 include('../verificar-autenticidade.php');
 include('../conexao-pdo.php');
-?>
 
+$pagina_ativa = 'ordens-servico';
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
