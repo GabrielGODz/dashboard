@@ -134,11 +134,18 @@ if (empty($_GET["ref"])) {
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="cpf" class="form-label">CPF</label>
-                                                <input required type="text" class="form-control" id="cpf" name="cpf" value="<?php echo $cpf; ?>" data-mask="000.000.000-00" minlength="14">
+                                                <div class="input-group">
+                                                    <input required type="text" class="form-control" id="cpf" name="cpf" value="<?php echo $cpf; ?>" data-mask="000.000.000-00" minlength="14">
+                                                    <span class="input=group-append">
+                                                        <button id="btn-search" type="button" class="btn btn-default btn-flat">
+                                                            <i class="bi bi-search"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div class="col-md">
                                                 <label for="nome" class="form-label">Nome</label>
-                                                <input readonly type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
+                                                <input required readonly type="text" class="form-control" id="nome" name="nome" value="<?php echo $nome; ?>">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -176,12 +183,12 @@ if (empty($_GET["ref"])) {
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
-                                                                        <select class="form-control">
+                                                                        <select required class="form-control" name="fk_servico[]">
                                                                             <?php echo $options; ?>
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="number">
+                                                                        <input required class="form-control" type="number" name="valor[]">
                                                                     </td>
                                                                     <td>
                                                                         <div class="btn-group">
@@ -253,8 +260,13 @@ if (empty($_GET["ref"])) {
 
     <script>
         $(function() {
+            
+            $("#cpf").keyup(function() {
+                // LIMPAR INPUT DE NOME
+                $("#nome").val("");
+            })
 
-            $("#cpf").change(function() {
+            $("#btn-search").click(function() {
                 // LIMPAR INPUT DE NOME
                 $("#nome").val("");
                 // FAZ A REQUISIÇÂO PARA O ARQUIVO "CONSULTAR_CPF.PHP"
@@ -267,7 +279,8 @@ if (empty($_GET["ref"])) {
                             $("#nome").val(data['dado']['nome']);
                         } else {
                             alert(data['dado']);
-                            $("cpf").val()
+                            $("#cpf").val()
+                            $("#cpf").focus()
                         }
                     }
                 )
@@ -294,11 +307,11 @@ if (empty($_GET["ref"])) {
                 var newRow = $("<tr>");
                 var cols = "";
                 cols += '<td>';
-                cols += '<select class="form-control" name="">';
+                cols += '<select class="form-control" name="fk_servico[]">';
                 cols += '<?php echo $options; ?>';
                 cols += '</select>'
                 cols += '</td>'
-                cols += '<td><input type="number" class="form-control" name=""></td>';
+                cols += '<td><input type="number" class="form-control" name="valor[]"></td>';
                 cols += '<td>';
                 cols += '<button class="btn btn-danger btn-sm" onclick="RemoveRow(this)" type="button"><i class="fas fa-trash"></i></button>';
                 cols += '</td>';
