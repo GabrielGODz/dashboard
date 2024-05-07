@@ -21,7 +21,7 @@ if ($_POST) {
 
         // stmt = statement 
         $stmt = $conn->prepare("
-            SELECT pk_usuario, nome 
+            SELECT pk_usuario , nome , foto
             FROM usuarios 
             WHERE email LIKE :email 
             AND senha LIKE :senha
@@ -52,6 +52,7 @@ if ($_POST) {
             $_SESSION["autenticado"] = true;
             $_SESSION["pk_usuario"] = $row->pk_usuario;
             $_SESSION["nome_usuario"] = $row->nome;
+            $_SESSION["foto_usuario"] = $row->foto;
             $_SESSION["tempo_login"] = time();
 
             // transforma string em array, onde tiver " "

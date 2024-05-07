@@ -10,10 +10,10 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="https://github.com/GabrielGODz.png" class="img-circle elevation-2" alt="User Image">
+        <img src="<?php echo caminhoURL.'/meu-perfil/fotos/'. $_SESSION["foto_usuario"];?>" class="img-circle elevation-2" alt="<?php echo $_SESSION["nome_usuario"]; ?>">
       </div>
       <div class="info">
-        <a href="#" class="d-block"><?php echo $_SESSION["nome_usuario"]; ?></a>
+        <a href="<?php echo caminhoURL;?>/meu-perfil/" class="d-block"><?php echo $_SESSION["nome_usuario"]; ?></a>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
             <i class="nav-icon bi bi-wrench-adjustable-circle-fill"></i>
             <p>
               Ordens de Serviço
-              <span class="right badge badge-warning">15</span>
+              <span class="right badge badge-warning"><?php echo $dados->total_os; ?></span>
             </p>
           </a>
         </li>

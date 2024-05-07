@@ -4,8 +4,8 @@ include('./conexao-pdo.php');
 
 $pagina_ativa = 'index';
 
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -63,14 +63,14 @@ $pagina_ativa = 'index';
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3>150</h3>
+                  <h3><?php echo $dados->total_os; ?></h3>
 
                   <p>Ordens de Serviço</p>
                 </div>
                 <div class="icon">
                   <i class="bi bi-wrench-adjustable-circle-fill"></i>
                 </div>
-                <a href="./ordens_servico.php" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="http://localhost/gabriel/dashboard/ordens-servico/" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -78,14 +78,14 @@ $pagina_ativa = 'index';
               <!-- small box -->
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3>53<sup style="font-size: 20px">%</sup></h3>
+                  <h3><?php echo intval($porcentagem_os_concluida); ?><sup style="font-size: 20px">%</sup></h3>
 
                   <p>Ordens Concluidas</p>
                 </div>
                 <div class="icon">
                   <i class="bi bi-check-circle-fill"></i>
                 </div>
-                <a href="./ordens_servico.php" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="http://localhost/gabriel/dashboard/ordens-servico/" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -93,14 +93,14 @@ $pagina_ativa = 'index';
               <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>44</h3>
+                  <h3><?php echo $dados->total_clientes; ?></h3>
 
                   <p>Clientes</p>
                 </div>
                 <div class="icon">
                   <i class="bi bi-person-circle"></i>
                 </div>
-                <a href="./clientes.php" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="http://localhost/gabriel/dashboard/clientes/" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -108,14 +108,14 @@ $pagina_ativa = 'index';
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3><?php echo $dados->total_servicos; ?></h3>
 
                   <p>Serviços</p>
                 </div>
                 <div class="icon">
                   <i class="bi-gear-wide-connected"></i>
                 </div>
-                <a href="#" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="http://localhost/gabriel/dashboard/servicos/" class="small-box-footer">Ver todos <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -191,42 +191,63 @@ $pagina_ativa = 'index';
       $("#theme-mode").click(function() {
         // pegar atributo class do objeto
         var classMode = $("#theme-mode").attr("class")
-        if(classMode == "fas fa-sun") {
+        if (classMode == "fas fa-sun") {
           $("body").removeClass("dark-mode");
           $("#theme-mode").attr("class", "fas fa-moon");
+          $("#navTopo").attr("class", "main-header navbar navbar-expand navbar-white navbar-light");
+          $("#asideMenu").attr("class", "main-sidebar sidebar-light-primary elevation-4");
         } else {
           $("body").addClass("dark-mode");
           $("#theme-mode").attr("class", "fas fa-sun");
+          $("#navTopo").attr("class", "main-header navbar navbar-expand navbar-black navbar-dark");
+          $("#asideMenu").attr("class", "main-sidebar sidebar-dark-primary elevation-4");
         }
       });
-      
-    var areaChartData = {
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label               : 'Digital Goods',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
-        },
-        {
-          label               : 'Electronics',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
-        },
-      ]
-    }
+
+      <?php
+      $sql = "
+      SELECT COUNT(pk_ordem_servico) total,
+        DATE_FORMAT(data_ordem_servico, '%m/%Y') mesAno
+      FROM ordens_servicos
+      GROUP BY DATE_FORMAT(data_ordem_servico, '%m/%Y')
+      ORDER BY data_format_servico
+      ";
+
+      try {
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+      } catch (PDOException $e) {
+        echo "console.log('" . $e->getMessage() . "'):";
+      }
+
+      ?>
+      var areaChartData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'O.S. Concluídas',
+            backgroundColor: 'rgba(60,141,188,0.9)',
+            borderColor: 'rgba(60,141,188,0.8)',
+            pointRadius: false,
+            pointColor: '#3b8bba',
+            pointStrokeColor: 'rgba(60,141,188,1)',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data: [28, 48, 40, 19, 86, 27, 90]
+          },
+          {
+            label: 'O.S. Total',
+            backgroundColor: 'rgba(210, 214, 222, 1)',
+            borderColor: 'rgba(210, 214, 222, 1)',
+            pointRadius: false,
+            pointColor: 'rgba(210, 214, 222, 1)',
+            pointStrokeColor: '#c1c7d1',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data: [65, 59, 80, 81, 56, 55, 40]
+          },
+        ]
+      }
 
       //-------------
       //- BAR CHART -

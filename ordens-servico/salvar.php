@@ -8,7 +8,7 @@ include("../conexao-pdo.php");
 // VERIFICA SE ESTÁ VINDO INFORMAÇÕES VIA POST
 if ($_POST) {
     // VERIFICA CAMPOS OBRIGATÓRIOS
-    if (empty($_POST["nome"]) || empty($_POST["cpf"]) || strlen($_POST["cpf"] !=14) || empty($_POST["email"])) {
+    if (empty($_POST["nome"]) || empty($_POST["cpf"]) || strlen($_POST["cpf"]) != 14) {
         $_SESSION["tipo"] = 'warning';
         $_SESSION["title"] = 'Ops!';
         $_SESSION["msg"] = 'Por favor, preencha os campos obrigatórios.';
@@ -24,7 +24,7 @@ if ($_POST) {
         try {
             if (empty($pk_ordem_servico)) {
                 $sql = "
-                INSERT INTO ordem_servico (data_ordem_servico, data_inicio, data_fim, fk_cliente, cpf, whatsapp, email) VALUES
+                INSERT INTO ordens_servicos (data_ordem_servico, data_inicio, data_fim, fk_cliente) VALUES
                 (CURDATE(), :data_inicio, :data_fim,(
                     SELECT pk_cliente
                     FROM clientes
@@ -37,7 +37,7 @@ if ($_POST) {
                 $stmt->bindParam(':cpf', $cpf);
             } else {
                 $sql = "
-                UPDATE ordens_servico SET
+                UPDATE ordens_servicos SET
                 data_inicio = :data_inicio,
                 data_fim = :data_fim,
                 fk_cliente = (
@@ -70,29 +70,42 @@ if ($_POST) {
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':fk_ordem_servico', $pk_ordem_servico);
             $stmt->execute();
-            
-            $sql ="
+
+            $sql = "
             INSERT INTO rl_servicos_os VALUES
             ";
 
             $servicos = $_POST["fk_servico"];
             $valores = $_POST["valor"];
 
-            foreach($servicos as $key => $servico) {
-                $sql.= "
-                (:fk_servico_$key, :fk_ordem_servico, :valor_$key),
-                ";
+
+            foreach ($servicos as $key => $servico) {
+                $sql .= "(:fk_servico_$key, :fk_ordem_servico, :valor_$key),";
             }
 
             $sql = substr($sql, 0, -1);
             $stmt = $conn->prepare($sql);
 
-            foreach($servicos as $key => $servico) {
+            foreach ($servicos as $key => $servico) {
                 $stmt->bindParam(":fk_servico_$key", $servicos[$key]);
                 $stmt->bindParam(":fk_ordem_servico", $pk_ordem_servico);
                 $stmt->bindParam(":valor_$key", $valores[$key]);
             }
 
+            $stmt->execute();
+
+            $sql = "
+            UPDATE ordens_servicos SET
+            valor_total = (
+                SELECT SUM(valor)
+                FROM rl_servicos_os
+                WHERE fk_ordem_servico = pk_ordem_servico
+            )
+            WHERE pk_ordem_servico = :pk_ordem_servico
+            ";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':pk_ordem_servico', $pk_ordem_servico);
             $stmt->execute();
 
             $_SESSION["tipo"] = 'success';
@@ -105,17 +118,6 @@ if ($_POST) {
             $_SESSION["title"] = 'Ops!';
             $_SESSION["msg"] = $ex->getMessage();
             header("Location: ./");
-
-            if (mysqli_errno($conn) == 1062) {
-                $msg = "Campo CPF, E-mail e/ou Whatsapp já cadastrado.";
-            }
-            echo
-            "
-            <script>
-                alert('$msg');
-                window.location='./';
-            </script>   
-            ";
             exit;
         }
     }
