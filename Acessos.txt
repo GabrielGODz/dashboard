@@ -1,0 +1,15 @@
+=== MYSQL ===
+host: sql307.infinityfree.com
+user: if0_36511511
+pass: Senac2024
+dbname: if0_36511511_senac
+
+=== CPANEL ===
+infinityfree.com
+zgabrielvitorino@gmail.com
+
+gabrielgodoi.free.nf
+
+https://cpanel.infinityfree.com/panel/indexpl.php?id=395ff66d950fb1cde350b69774ebebc49eca4d19
+
+https://dash.infinityfree.com/accounts/if0_36511511/ftpDetails
